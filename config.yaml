@@ -1,0 +1,49 @@
+dart:
+  report_types: ["감사보고서", "유상증자결정", "주요사항보고서"]
+  lookback_days: 1
+
+news:
+  sources:
+    - url: "https://rss.hankyung.com/"
+      name: "한국경제"
+    - url: "https://rss.mt.co.kr/"
+      name: "머니투데이"
+    - url: "https://www.venturesquare.net/feed"
+      name: "벤처스퀘어"
+    - url: "https://platum.kr/feed"
+      name: "플래텀"
+    - url: "https://rss.news1.kr/"
+      name: "뉴스1"
+  lookback_hours: 24
+
+filter:
+  exclusion_keywords:
+    - "코스닥 상장"
+    - "코스피 상장"
+    - "대기업"
+    - "재벌"
+    - "그룹사"
+    - "부동산"
+    - "건설"
+    - "분양"
+    - "적자 지속"
+    - "회생절차"
+    - "파산"
+  inclusion_keywords:
+    - "시리즈B"
+    - "시리즈C"
+    - "시리즈D"
+    - "투자 유치"
+    - "CFO"
+    - "IR담당"
+    - "매출 성장"
+    - "흑자 전환"
+    - "글로벌 확장"
+
+claude:
+  model: "claude-opus-4-6"
+  max_calls_per_day: 50
+  max_content_chars: 500
+
+alerts:
+  hot_score_threshold: 4
