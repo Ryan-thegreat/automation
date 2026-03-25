@@ -31,6 +31,7 @@ class DealCardWriter:
             return existing
         folder = _get_folder(item["signal_score"])
         path = self.deals_dir / folder / f"{date_str}-{company}.md"
+        path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(self._render(item, date_str), encoding="utf-8")
         logger.info(f"Created deal card: {path}")
         return path
