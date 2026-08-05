@@ -67,3 +67,35 @@ def test_dart_only_no_news_link(config, tmp_deals, hot_item):
     content = list((tmp_deals / "hot").glob("*.md"))[0].read_text(encoding="utf-8")
     assert "DART 공시" in content
     assert "뉴스 기사" not in content
+
+def test_attach_deep_dive_appends_to_existing_card(config, tmp_deals, hot_item):
+    writer = DealCardWriter(config, deals_dir=str(tmp_deals))
+    writer.write(hot_item, date_str="2026-03-25")
+    writer.attach_deep_dive(
+        company="테스트컴퍼니", grade="B", total_score=72.5,
+        summary="딥다이브 요약", report_ref="reports/test.md", date_str="2026-04-01",
+    )
+    all_files = list(tmp_deals.rglob("*.md"))
+    assert len(all_files) == 1  # 새 파일 안 만들고 기존 카드에 append
+    content = all_files[0].read_text(encoding="utf-8")
+    assert "심층 DD 리포트" in content
+    assert "72.5/100" in content
+
+def test_attach_deep_dive_creates_card_when_no_source_exists(config, tmp_deals):
+    writer = DealCardWriter(config, deals_dir=str(tmp_deals))
+    writer.attach_deep_dive(
+        company="신규딥다이브기업", grade="A", total_score=85.0,
+        summary="바로 IR덱 업로드", report_ref="reports/x.md", date_str="2026-04-01",
+    )
+    files = list((tmp_deals / "hot").glob("*.md"))
+    assert len(files) == 1
+    assert "deal-deep-dive" in files[0].read_text(encoding="utf-8")
+
+def test_attach_deep_dive_grade_d_goes_to_archive(config, tmp_deals):
+    writer = DealCardWriter(config, deals_dir=str(tmp_deals))
+    writer.attach_deep_dive(
+        company="저조기업", grade="D", total_score=30.0,
+        summary="투자 보류", report_ref="reports/y.md", date_str="2026-04-01",
+    )
+    files = list((tmp_deals / "archive").glob("*.md"))
+    assert len(files) == 1
