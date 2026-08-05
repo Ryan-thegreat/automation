@@ -14,6 +14,8 @@ news:
       name: "플래텀"
     - url: "https://rss.news1.kr/"
       name: "뉴스1"
+    - url: "https://byline.network/feed/"
+      name: "바이라인네트워크"
   lookback_hours: 24
 
 filter:
