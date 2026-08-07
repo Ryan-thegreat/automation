@@ -43,7 +43,11 @@ class ClaudeAnalyzer:
                     messages=[{"role": "user", "content": prompt}]
                 )
                 text = resp.content[0].text.strip()
-                parsed = json.loads(text)
+                if text.startswith("```"):
+                    text = text.split("```")[1]
+                    if text.startswith("json"):
+                        text = text[4:]
+                parsed = json.loads(text.strip())
                 return {**item, **parsed}
             except (json.JSONDecodeError, Exception) as e:
                 logger.warning(f"Claude attempt {attempt+1} failed: {e}")
